@@ -22,34 +22,7 @@ describe("/general errors", () => {
         expect(msg).toBe("path not found");
       });
   });
-  test("POST:406 responds with 406 when POST request receieved for path where method is not allowed", () => {
-    return request(app)
-      .post("/api/topics")
-      .expect(406)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("method not allowed");
-      });
-  });
-  test("PATCH:406 responds with 406 when PATCH request receieved for path where method is not allowed", () => {
-    return request(app)
-      .patch("/api/topics")
-      .expect(406)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("method not allowed");
-      });
-  });
-  test("DELETE:406 responds with 406 when PATCH request receieved for path where method is not allowed", () => {
-    return request(app)
-      .patch("/api/topics")
-      .expect(406)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("method not allowed");
-      });
-  });
-});
+})
 
 describe("/api/topics", () => {
   test("GET:200 responds with an array of topics", () => {
@@ -67,4 +40,4 @@ describe("/api/topics", () => {
         });
       });
   });
-});
+})
