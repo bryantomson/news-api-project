@@ -3,6 +3,7 @@ const app = require("../app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
+const fs = require("fs/promises");
 
 beforeEach(() => {
   return seed(testData);
@@ -22,7 +23,7 @@ describe("/general errors", () => {
         expect(msg).toBe("path not found");
       });
   });
-})
+});
 
 describe("/api/topics", () => {
   test("GET:200 responds with an array of topics", () => {
@@ -40,4 +41,19 @@ describe("/api/topics", () => {
         });
       });
   });
-})
+});
+
+describe("/api", () => {
+  test("GET:200 responds with an array of endpoints", () => {
+    return request(app)
+      .get("/api/")
+      .expect(200)
+      .then(({ body }) => {
+        const response = JSON.parse(body);
+        fs.readFile("./endpoints.json").then((data) => {
+          const expected = JSON.parse(data);
+          expect(response).toEqual(expected);
+        });
+      });
+  });
+});

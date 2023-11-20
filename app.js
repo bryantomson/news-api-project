@@ -1,10 +1,12 @@
-const { getTopics } = require("./controller");
+const { getTopics, getEndpoints } = require("./controller");
 const {  handleCustomErrors, handle500, handleNotFound } = require("./errors");
 
 const express = require("express");
 const app = express();
 
 app.get("/api/topics", getTopics);
+
+app.get("/api", getEndpoints)
 
 
 app.get("*", (req, res, next) => {
