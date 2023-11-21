@@ -7,10 +7,11 @@ exports.selectArticleById = (article_id) => {
   WHERE article_id = $1;`,
       [article_id]
     )
-    .then(({rows}) => {
+    .then(({ rows }) => {
       if (rows.length) {
         return rows[0];
       }
       return Promise.reject({ status: 404, msg: "Article does not exist" });
     });
 };
+
