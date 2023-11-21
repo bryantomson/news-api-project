@@ -98,6 +98,7 @@ describe("GET /api", () => {
 
 });
 
+
 describe("GET /api/articles", () => {
   test("GET:200 responds with an array of articles", () => {
     return request(app)
@@ -124,3 +125,4 @@ describe("GET /api/articles", () => {
   });
 });
 })
+

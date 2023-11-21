@@ -10,6 +10,7 @@ exports.getTopics = (req, res, next) => {
     });
   };
 
+
   exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params;
     selectArticleById(article_id).then((article) => {
@@ -29,3 +30,18 @@ exports.getArticles = (req, res, next) => {
     fs.readFile("./endpoints.json").then((endpoints) => {
   res.status(200).send(endpoints)  });
     }
+
+exports.getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id).then((article) => {
+    res.status(200).send({ article });
+  }).catch((err) => {
+    next(err)
+  })
+}
+
+exports.getEndpoints = (req, res, next) => {
+  fs.readFile("./endpoints.json").then((endpoints) => {
+res.status(200).send(endpoints) 
+ });
+}
