@@ -50,6 +50,7 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
+        console.log(body, "HEYYY")
         expect(article).toMatchObject({
           article_id: 1,
           title: "Living in the shadow of a great man",
@@ -82,7 +83,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 
   describe("GET /api", () => {
-    test("GET:200 responds with an array of endpoints", () => {
+    test("200: responds with an array of endpoints", () => {
       return request(app)
         .get("/api/")
         .expect(200)
@@ -95,51 +96,99 @@ describe("GET /api/articles/:article_id", () => {
         });
     });
   });
+});
 
-  describe("GET /api/articles", () => {
-    test("GET:200 responds with an array of articles", () => {
-      return request(app)
-        .get("/api/articles")
-        .expect(200)
-        .then(({ body }) => {
-          const { articles } = body;
-          expect(articles).toHaveLength(13);
-          expect(articles).toBeSortedBy("created_at", { descending: true });
-          articles.forEach((article) => {
-            expect(article).toMatchObject({
-              article_id: expect.any(Number),
-              article_img_url: expect.any(String),
-              author: expect.any(String),
-              created_at: expect.any(String),
-              title: expect.any(String),
-              topic: expect.any(String),
-              votes: expect.any(Number),
-              comment_count: expect.any(Number),
-            });
-            expect(article.hasOwnProperty("body")).toBe(false);
+describe("GET /api/articles", () => {
+  test("GET:200 responds with an array of articles", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body;
+        expect(articles).toHaveLength(13);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            article_id: expect.any(Number),
+            article_img_url: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+          expect(article.hasOwnProperty("body")).toBe(false);
+        });
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: responds with an array of comments for the given article_id", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        console.log(body, "Here!!!!")
+        expect(comments).toHaveLength(11);
+        expect(comments).toBeSortedBy("created_at", { descending: true });
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
           });
         });
-    });
+      });
+  });
+  test("200: responds with empty array if the article_id exists but there are no comments with that article_id", () => {
+    return request(app)
+      .get("/api/articles/7/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toEqual([]);
+      });
+  });
+  test("404: responds with error message if that article_id does not exist", () => {
+    return request(app)
+      .get("/api/articles/7464/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+      });
+  });
+  test("400: responds with 'bad request' if article_id format is incorrect", () => {
+    return request(app)
+      .get("/api/articles/not-an-id/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
   });
 });
 
 // describe("POST /api/articles/:article_id/comments", () => {
-// test("POST:201 inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
-//   const testComment = {
-//     username: "PilesPeterson",
-//     body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows"
-//   };
-//   return request(app)
-//     .post("/api/teams")
-//     .send(testComment)
-//     .expect(201)
-//     .then(({body}) => {
-//       const {comment} = body
-//       expect(comment).toEqual(testComment);
-//       ;
-//     });
-// });
-
-// });
-
-
+  // test("POST:201 inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
+  //   const testComment = {
+  //     username: "PilesPeterson",
+  //     body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows"
+  //   };
+  //   return request(app)
+  //     .post("/api/teams")
+  //     .send(testComment)
+  //     .expect(201)
+  //     .then(({body}) => {
+  //       const {comment} = body
+  //       expect(comment).toEqual(testComment);
+  //       ;
+  //     });
+  // });
+  
+  // });
+  
