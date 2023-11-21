@@ -1,5 +1,5 @@
 
-const { getTopics, getEndpoints, getArticleById, getCommentsByArticleId} = require("./controller");
+const { getTopics, getEndpoints, getArticleById, getArticles, getCommentsByArticleId} = require("./controller");
 
 const {  handleCustomErrors, handle500, handleNotFound } = require("./errors");
 
@@ -10,6 +10,8 @@ app.get("/api/topics", getTopics);
 
 
 app.get("/api/articles/:article_id", getArticleById)
+
+app.get("/api/articles", getArticles);
 
 app.get("/api", getEndpoints)
 
