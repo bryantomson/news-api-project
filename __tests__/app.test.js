@@ -50,6 +50,7 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
+        console.log(body, "HEYYY")
         expect(article).toMatchObject({
           article_id: 1,
           title: "Living in the shadow of a great man",
@@ -119,9 +120,9 @@ describe("GET /api/articles", () => {
           });
           expect(article.hasOwnProperty("body")).toBe(false);
         });
-      })
-    })
-  })
+      });
+  });
+});
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("200: responds with an array of comments for the given article_id", () => {
@@ -130,8 +131,9 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
+        console.log(body, "Here!!!!")
         expect(comments).toHaveLength(11);
-        expect(comments).toBeSortedBy("created_at", {descending: true})
+        expect(comments).toBeSortedBy("created_at", { descending: true });
         comments.forEach((comment) => {
           expect(comment).toMatchObject({
             comment_id: expect.any(Number),
@@ -146,15 +148,27 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
   test("200: responds with empty array if the article_id exists but there are no comments with that article_id", () => {
     return request(app)
-      .get("/api/articles/3999/comments")
+      .get("/api/articles/7/comments")
       .expect(200)
       .then(({ body }) => {
-        const{comments} = body
-        expect(comments).toEqual([])
-        
+        const { comments } = body;
+        expect(comments).toEqual([]);
       });
   });
-
-//404: responds with error message if that article_id does not exist
-//200: responds with empty array if the article_id exists but there are no comments with that article_id
+  test("404: responds with error message if that article_id does not exist", () => {
+    return request(app)
+      .get("/api/articles/7464/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not found");
+      });
+  });
+  test("400: responds with 'bad request' if article_id format is incorrect", () => {
+    return request(app)
+      .get("/api/articles/not-an-id/comments")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
 });

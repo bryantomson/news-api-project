@@ -1,6 +1,6 @@
 const { selectTopics } = require("./models/topics-model");
 
-const { selectArticleById, selectArticles } = require("./models/articles-model");
+const { selectArticleById, selectArticles, checkArticleExists } = require("./models/articles-model");
 const { selectCommentsByArticleId } = require("./models/comments-model");
 
 const fs = require("fs/promises");
@@ -51,7 +51,9 @@ exports.getEndpoints = (req, res, next) => {
 
 exports.getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  selectCommentsByArticleId(article_id).then((comments) => {
-    res.status(200).send({ comments });
-  });
+
+Promise.all([selectCommentsByArticleId(article_id), checkArticleExists(article_id)]).then((comments) => {
+    const resolvedComments = comments[0]
+    res.status(200).send({ comments: resolvedComments });
+  }).catch(next)
 };
