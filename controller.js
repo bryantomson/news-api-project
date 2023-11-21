@@ -18,9 +18,10 @@ exports.getArticleById = (req, res, next) => {
   }).catch((err) => {
     next(err)
   })
+}
 
 exports.getEndpoints = (req, res, next) => {
   fs.readFile("./endpoints.json").then((endpoints) => {
-res.status(200).send(endpoints)  });
-
-};
+res.status(200).send(endpoints) 
+ });
+}
