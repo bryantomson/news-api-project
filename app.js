@@ -1,4 +1,4 @@
-const { getTopics, getEndpoints, getArticles, getArticleById } = require("./controller");
+const { getTopics, getEndpoints, getArticles, getArticleById, postCommentsByArticleId } = require("./controller");
 const {  handleCustomErrors, handle500, handleNotFound } = require("./errors");
 
 const express = require("express");
@@ -13,6 +13,7 @@ app.get("/api/articles", getArticles);
 
 app.get("/api", getEndpoints)
 
+app.post("/api/articles/:article_id/comments", postCommentsByArticleId)
 
 
 app.get("*", (req, res, next) => {
