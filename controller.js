@@ -1,4 +1,5 @@
 const { selectTopics } = require("./models/topics-model");
+const { selectArticles } = require("./models/articles-model");
 const fs = require("fs/promises");
 
 exports.getTopics = (req, res, next) => {
@@ -6,6 +7,15 @@ exports.getTopics = (req, res, next) => {
     res.status(200).send({ topics });
   });
 };
+exports.getArticles = (req, res, next) => {
+  selectArticles().then((articles) => {
+    res.status(200).send({ articles });
+  });
+};
+
+
+
+
 exports.getEndpoints = (req, res, next) => {
   fs.readFile("./endpoints.json").then((endpoints) => {
 res.status(200).send(endpoints)  });
