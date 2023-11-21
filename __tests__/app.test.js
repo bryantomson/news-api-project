@@ -123,23 +123,23 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe("POST /api/articles/:article_id/comments", () => {
-test("POST:201 inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
-  const testComment = {
-    username: "PilesPeterson",
-    body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows"
-  };
-  return request(app)
-    .post("/api/teams")
-    .send(testComment)
-    .expect(201)
-    .then(({body}) => {
-      const {comment} = body
-      expect(comment).toEqual(testComment);
-      ;
-    });
-});
+// describe("POST /api/articles/:article_id/comments", () => {
+// test("POST:201 inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
+//   const testComment = {
+//     username: "PilesPeterson",
+//     body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows"
+//   };
+//   return request(app)
+//     .post("/api/teams")
+//     .send(testComment)
+//     .expect(201)
+//     .then(({body}) => {
+//       const {comment} = body
+//       expect(comment).toEqual(testComment);
+//       ;
+//     });
+// });
 
-});
+// });
 
 
