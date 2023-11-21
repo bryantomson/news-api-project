@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("/general errors", () => {
-  test("GET:404 responds with 404: not found for a non-existent path", () => {
+  test("GET 404: responds with 404: not found for a get request to non-existent path", () => {
     return request(app)
       .get("/not-a-path")
       .expect(404)
@@ -24,8 +24,8 @@ describe("/general errors", () => {
   });
 });
 
-describe("/api/topics", () => {
-  test("GET:200 responds with an array of topics", () => {
+describe("GET /api/topics", () => {
+  test("200: responds with an array of topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -42,8 +42,8 @@ describe("/api/topics", () => {
   });
 });
 
-describe("/api/articles/:article_id", () => {
-  test("GET:200 responds with the article with specified ID", () => {
+describe("GET /api/articles/:article_id", () => {
+  test("200: responds with the article with specified ID", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -63,19 +63,19 @@ describe("/api/articles/:article_id", () => {
       });
   });
 
-  test("GET:404 sends an appropriate status and error message when given a valid but non-existent id", () => {
+  test("404: sends an appropriate status and error message when given a valid but non-existent id", () => {
     return request(app)
       .get("/api/articles/9999999")
       .expect(404)
-      .then(({body}) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Article does not exist");
       });
   });
-  test("GET:400 sends an appropriate status and error message when given an invalid id", () => {
+  test("400: sends an appropriate status and error message when given an invalid id", () => {
     return request(app)
       .get("/api/articles/not-an-id")
       .expect(400)
-      .then(({body}) => {
+      .then(({ body }) => {
         expect(body.msg).toBe("Bad request");
       });
   });
