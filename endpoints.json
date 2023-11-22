@@ -65,5 +65,17 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new comment with the specified article_id, responds with the posted comment",
+    "queries": [],
+    "exampleResponse": {
+      "comment_id": 19,
+      "body": "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows",
+      "article_id": 1,
+      "author": "rogersop",
+      "votes": 0,
+      "created_at": "2023-11-22T10:42:10.227Z"
+    }
   }
 }

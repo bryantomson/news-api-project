@@ -5,6 +5,7 @@ const {
   getArticleById,
   getCommentsByArticleId,
   postCommentByArticleId,
+  patchArticleById,
 } = require("./controller");
 const { handleCustomErrors, handle500, handleNotFound } = require("./errors");
 
@@ -23,6 +24,8 @@ app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
+
+app.patch("/api/articles/:article_id", patchArticleById);
 
 app.get("*", (req, res, next) => {
   next({ status: 404, msg: "path not found" });
