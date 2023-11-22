@@ -1,14 +1,15 @@
 const { selectTopics } = require("./models/topics-model");
 
-const { insertCommentsByArticleId } = require("./models/comments-model");
-
 const {
   selectArticleById,
   selectArticles,
   checkArticleExists,
 } = require("./models/articles-model");
 
-const { selectCommentsByArticleId } = require("./models/comments-model");
+const {
+  selectCommentsByArticleId,
+  insertCommentByArticleId,
+} = require("./models/comments-model");
 
 const fs = require("fs/promises");
 
@@ -17,8 +18,6 @@ exports.getTopics = (req, res, next) => {
     res.status(200).send({ topics });
   });
 };
-
-
 
 exports.getArticles = (req, res, next) => {
   selectArticles().then((articles) => {
@@ -57,9 +56,14 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .catch(next);
 };
 
-
-exports.postCommentsByArticleId = (req, res, next) => {
-  insertCommentsByArticleId();
+exports.postCommentByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  const newComment = req.body;
+  insertCommentByArticleId(article_id, newComment)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
-
-

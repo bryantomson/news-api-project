@@ -14,7 +14,7 @@ afterAll(() => {
 });
 
 describe("/general errors", () => {
-  test("GET 404: responds with 404: not found for a get request to non-existent path", () => {
+  test("404: responds with 404: not found for a get request to non-existent path", () => {
     return request(app)
       .get("/not-a-path")
       .expect(404)
@@ -50,7 +50,6 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
-        console.log(body, "HEYYY")
         expect(article).toMatchObject({
           article_id: 1,
           title: "Living in the shadow of a great man",
@@ -78,7 +77,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/not-an-id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad request");
+        expect(body.msg).toBe("bad request");
       });
   });
 
@@ -99,7 +98,7 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles", () => {
-  test("GET:200 responds with an array of articles", () => {
+  test("200: responds with an array of articles", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -131,7 +130,6 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
-        console.log(body, "Here!!!!")
         expect(comments).toHaveLength(11);
         expect(comments).toBeSortedBy("created_at", { descending: true });
         comments.forEach((comment) => {
@@ -168,27 +166,76 @@ describe("GET /api/articles/:article_id/comments", () => {
       .get("/api/articles/not-an-id/comments")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Bad request");
+        expect(body.msg).toBe("bad request");
       });
   });
 });
 
-// describe("POST /api/articles/:article_id/comments", () => {
-  // test("POST:201 inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
-  //   const testComment = {
-  //     username: "PilesPeterson",
-  //     body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows"
-  //   };
-  //   return request(app)
-  //     .post("/api/teams")
-  //     .send(testComment)
-  //     .expect(201)
-  //     .then(({body}) => {
-  //       const {comment} = body
-  //       expect(comment).toEqual(testComment);
-  //       ;
-  //     });
-  // });
-  
-  // });
-  
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: inserts a new comment to the db at the specified article id and sends posted comment back to the client", () => {
+    const testComment = {
+      username: "rogersop",
+      body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows",
+    };
+
+    const expected = {
+      author: "rogersop",
+      body: "The article 'Living in the Shadow of a Great Man' resonates deeply. It captures the universal struggle of establishing identity alongside an extraordinary figure. The author's insight prompts reflection on personal growth amid the shadows",
+      article_id: 1,
+      comment_id: 19,
+      created_at: expect.any(String),
+      votes: 0,
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toEqual(expected);
+      });
+  });
+
+  test("404: returns custom error message if the username does not exist in the db", () => {
+    const testComment = {
+      username: "not-a-user",
+      body: "blah blah blah",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual(
+          "username not found, please sign up to continue"
+        );
+      });
+  });
+  test("404: returns not found if the article_id does not exist in the db", () => {
+    const testComment = {
+      username: "rogersop",
+      body: "blah blah blah",
+    };
+    return request(app)
+      .post("/api/articles/999/comments")
+      .send(testComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("not found");
+      });
+  });
+
+  test("400: returns bad request if the inserted comment does not have the required properties", () => {
+    const testComment = {
+      username: "rogersop",
+      
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(testComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("bad request");
+      });
+  });});
