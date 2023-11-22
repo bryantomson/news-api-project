@@ -13,7 +13,6 @@ exports.selectArticles = () => {
     });
 };
 
-
 exports.selectArticleById = (article_id) => {
   return db
     .query(
@@ -30,11 +29,28 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.checkArticleExists = (article_id) => {
-  return db.query(
-    `SELECT * FROM articles WHERE article_id = $1`, [article_id]
-  ).then(({rows}) => {
-    if(!rows.length) {
-      return Promise.reject({status: 404, msg: "Not found"})
-    }
-  })
-}
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1`, [article_id])
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
+    });
+};
+
+exports.incrementArticleVotes = (article_id, inc_votes) => {
+  return db
+    .query(
+      `UPDATE articles
+    SET votes = votes + $2
+    WHERE article_id = $1
+    RETURNING*;`,
+      [article_id, inc_votes]
+    )
+    .then(({ rows }) => {
+      if (!rows.length) {
+        return Promise.reject({ status: 404, msg: "not found" });
+      }
+      return rows[0];
+    });
+};
