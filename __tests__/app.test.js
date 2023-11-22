@@ -289,3 +289,26 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: responds with status 204 and no content", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+
+  test("404: responds with error message if comment_id does not exist", () => {
+    return request(app)
+      .delete("/api/comments/7464")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("not found");
+      });
+  });
+
+  test("400: responds with 'bad request' if comment_id format is incorrect", () => {
+    return request(app)
+      .delete("/api/comments/not-an-id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});

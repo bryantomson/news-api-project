@@ -10,6 +10,7 @@ const {
 const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
+  deleteFromComments,
 } = require("./models/comments-model");
 
 const fs = require("fs/promises");
@@ -79,4 +80,13 @@ exports.patchArticleById = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  deleteFromComments(comment_id)
+    .then((response) => {
+      res.status(204).send();
+    })
+    .catch(next);
 };
