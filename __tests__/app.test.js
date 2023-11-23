@@ -360,6 +360,7 @@ describe("GET /api/users", () => {
       .then(({ body }) => {
         const { users } = body;
         expect(users).toHaveLength(4);
+        console.log(users,"users")
         users.forEach((user) => {
           expect(user).toMatchObject({
             username: expect.any(String),
