@@ -1,4 +1,5 @@
 const { selectTopics } = require("./models/topics-model");
+const { selectUsers } = require("./models/users-model.js");
 
 const {
   selectArticleById,
@@ -20,6 +21,8 @@ exports.getTopics = (req, res, next) => {
     res.status(200).send({ topics });
   });
 };
+
+
 
 exports.getArticles = (req, res, next) => {
   selectArticles().then((articles) => {
