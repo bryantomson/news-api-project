@@ -121,6 +121,45 @@ describe("GET /api/articles", () => {
         });
       });
   });
+
+  describe("GET /api/articles (topic query)", () => {
+    test("accepts a topic query which returns articles with specified topic ", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toHaveLength(1);
+          expect(articles[0]).toMatchObject({
+            article_id: expect.any(Number),
+            article_img_url: expect.any(String),
+            author: expect.any(String),
+            created_at: expect.any(String),
+            title: expect.any(String),
+            topic: "cats",
+            votes: expect.any(Number),
+          });
+        });
+    });
+
+    test("200: responds with empty array if the topic exists but there are no articles for that topic", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toEqual([]);
+        });
+    });
+    test("404: responds with error message if that topic does not exist", () => {
+      return request(app)
+        .get("/api/articles?topic=not-a-topic")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Not found");
+        });
+    });
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
@@ -321,6 +360,7 @@ describe("GET /api/users", () => {
       .then(({ body }) => {
         const { users } = body;
         expect(users).toHaveLength(4);
+        console.log(users,"users")
         users.forEach((user) => {
           expect(user).toMatchObject({
             username: expect.any(String),
