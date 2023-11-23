@@ -22,6 +22,12 @@ exports.getTopics = (req, res, next) => {
   });
 };
 
+exports.getUsers = (req, res, next) => {
+  selectUsers().then((users) => {
+    res.status(200).send({ users });
+  });
+};
+
 exports.getArticles = (req, res, next) => {
   const { topic } = req.query;
   selectArticles(topic).then((articles) => {
