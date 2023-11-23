@@ -6,6 +6,7 @@ const {
   getCommentsByArticleId,
   postCommentByArticleId,
   patchArticleById,
+  deleteCommentById,
 } = require("./controller");
 const { handleCustomErrors, handle500, handleNotFound } = require("./errors");
 
@@ -26,6 +27,8 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.patch("/api/articles/:article_id", patchArticleById);
+
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.get("*", (req, res, next) => {
   next({ status: 404, msg: "path not found" });
