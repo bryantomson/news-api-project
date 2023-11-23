@@ -1,16 +1,23 @@
 const db = require("../db/connection");
 
-exports.selectArticles = () => {
-  return db
-    .query(
-      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, CAST(COUNT(comments.article_id) AS INT) AS "comment_count" 
-      FROM articles  LEFT JOIN comments ON articles.article_id = comments.article_id 
-      GROUP BY articles.article_id 
-      ORDER BY articles.created_at DESC`
-    )
-    .then(({ rows }) => {
+exports.selectArticles = (topic) => {
+  let queryString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, CAST(COUNT(comments.article_id) AS INT) AS "comment_count" 
+FROM articles  LEFT JOIN comments ON articles.article_id = comments.article_id`;
+
+  if (topic) queryString += ` WHERE topic = $1`;
+
+  queryString += ` GROUP BY articles.article_id 
+ORDER BY articles.created_at DESC;`;
+
+  if (topic) {
+    return db.query(queryString, [topic]).then(({ rows }) => {
       return rows;
     });
+  }
+
+  return db.query(queryString).then(({ rows }) => {
+    return rows;
+  });
 };
 
 exports.selectArticleById = (article_id) => {
