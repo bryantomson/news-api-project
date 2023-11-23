@@ -1,4 +1,4 @@
-const { selectTopics } = require("./models/topics-model");
+const { selectTopics, checkTopicExists } = require("./models/topics-model");
 const { selectUsers } = require("./models/users-model.js");
 
 const {
@@ -30,9 +30,20 @@ exports.getUsers = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const { topic } = req.query;
-  selectArticles(topic).then((articles) => {
-    res.status(200).send({ articles });
-  });
+  if (topic) {
+    Promise.all([selectArticles(topic), checkTopicExists(topic)])
+      .then((articles) => {
+        const resolvedArticles = articles[0];
+        res.status(200).send({ articles: resolvedArticles });
+      })
+      .catch(next);
+  } else {
+    selectArticles()
+      .then((articles) => {
+        res.status(200).send({ articles });
+      })
+      .catch(next);
+  }
 };
 
 exports.getEndpoints = (req, res, next) => {
