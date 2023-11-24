@@ -15,6 +15,7 @@ const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
   deleteFromComments,
+  incrementCommentVotes
 } = require("./models/comments-model");
 
 const fs = require("fs/promises");
@@ -32,12 +33,9 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getUserByUsername = (req, res, next) => {
-  console.log("here");
   const { username } = req.params;
-  console.log(username);
   selectUserByUsername(username)
     .then((user) => {
-      console.log(user);
       res.status(200).send({user});
     })
     .catch(next);
@@ -114,9 +112,7 @@ exports.patchArticleById = (req, res, next) => {
     .then((row) => {
       res.status(200).send({ updated: row });
     })
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next)
 };
 
 exports.deleteCommentById = (req, res, next) => {
@@ -127,3 +123,13 @@ exports.deleteCommentById = (req, res, next) => {
     })
     .catch(next);
 };
+
+exports.patchCommentById = (req,res,next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  incrementCommentVotes(comment_id, inc_votes)
+  .then((row) => {
+    res.status(200).send({ updated: row });
+  })
+  .catch(next)
+} 
