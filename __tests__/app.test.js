@@ -4,6 +4,7 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const fs = require("fs/promises");
+const { log } = require("console");
 
 beforeEach(() => {
   return seed(testData);
@@ -88,7 +89,12 @@ describe("GET /api/articles/:article_id", () => {
         .get("/api/")
         .expect(200)
         .then(({ body }) => {
+console.log(body,"liubw")
+
           const response = JSON.parse(body);
+
+console.log(response)
+
           fs.readFile("./endpoints.json").then((data) => {
             const expected = JSON.parse(data);
             expect(response).toEqual(expected);
