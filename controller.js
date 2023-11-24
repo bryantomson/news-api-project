@@ -29,16 +29,16 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  const { topic } = req.query;
+  const { topic, sort_by, order } = req.query;
   if (topic) {
-    Promise.all([selectArticles(topic), checkTopicExists(topic)])
+    Promise.all([selectArticles(topic, sort_by, order), checkTopicExists(topic)])
       .then((articles) => {
         const resolvedArticles = articles[0];
         res.status(200).send({ articles: resolvedArticles });
       })
       .catch(next);
   } else {
-    selectArticles()
+    selectArticles(topic, sort_by, order)
       .then((articles) => {
         res.status(200).send({ articles });
       })
