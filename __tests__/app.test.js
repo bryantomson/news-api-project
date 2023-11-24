@@ -85,7 +85,7 @@ describe("GET /api/articles/:article_id", () => {
   describe("GET /api", () => {
     test("200: responds with an array of endpoints", () => {
       return request(app)
-        .get("/api/")
+        .get("/api")
         .expect(200)
         .then(({ body }) => {
           const response = JSON.parse(body);
@@ -442,6 +442,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
 describe("PATCH /api/articles/:article_id", () => {
   test("200: returns row with votes incremented by given value at sepecified article id", () => {
     const incVotes = { inc_votes: 3 };
@@ -492,6 +493,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
 describe("DELETE /api/comments/:comment_id", () => {
   test("204: responds with status 204 and no content", () => {
     return request(app).delete("/api/comments/1").expect(204);
