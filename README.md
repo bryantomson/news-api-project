@@ -1,6 +1,19 @@
 # Northcoders News API
 
-To work on this repo, you will need to manually create the local database connections by creating the following files in the directory root:
+
+A [RESTful API](https://news-api-project-jycn.onrender.com/) to access news application data catergorised articles, comments, topics and users.
+
+
+# Available API resources
+
+
+Numerous endpoints are available covering most CRUD operations. For a list of the available resources and their endpoints, see [available endpoints](https://news-api-project-jycn.onrender.com/api).
+
+
+# Setup
+
+
+To run locally, you will need to manually create the local database connections by creating the following files in the directory root:
 
 * .env.test
 
