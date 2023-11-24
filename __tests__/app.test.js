@@ -518,18 +518,15 @@ describe('PATCH /api/comments/:comment_id', () => {
   test("200: returns row with votes incremented by given value at sepecified comment id", () => {
     const incVotes = { inc_votes: 3 };
     const expected = {
-      article_id: 1,
-      title: "Living in the shadow of a great man",
-      topic: "mitch",
-      author: "butter_bridge",
-      body: "I find this existence challenging",
-      created_at: expect.any(String),
-      votes: 103,
-      article_img_url:
-        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      comment_id: 1,
+      body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+    votes: 19,
+    author: "butter_bridge",
+    article_id: 9,
+    created_at: expect.any(String)
     };
     return request(app)
-      .patch("/api/articles/1")
+      .patch("/api/comments/1")
       .send(incVotes)
       .expect(200)
       .then(({ body }) => {
@@ -538,31 +535,31 @@ describe('PATCH /api/comments/:comment_id', () => {
       });
   });
 
-  // test("404: responds with error message if that article_id does not exist", () => {
-  //   return request(app)
-  //     .patch("/api/articles/7464")
-  //     .expect(404)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe("not found");
-  //     });
-  // });
-  // test("400: responds with 'bad request' if article_id format is incorrect", () => {
-  //   return request(app)
-  //     .patch("/api/articles/not-an-id")
-  //     .expect(400)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe("bad request");
-  //     });
-  // });
-  // test("400: responds with 'bad request' if request body is invalid", () => {
-  //   const badBody = { notallowed: "illegal" };
-  //   return request(app)
-  //     .patch("/api/articles/1")
-  //     .expect(400)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe("bad request");
-  //     });
-  // });
+  test("404: responds with error message if that comment_id does not exist", () => {
+    return request(app)
+      .patch("/api/comments/7464")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("not found");
+      });
+  });
+  test("400: responds with 'bad request' if comment_id format is incorrect", () => {
+    return request(app)
+      .patch("/api/comments/not-an-id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+  test("400: responds with 'bad request' if request body is invalid", () => {
+    const badBody = { notallowed: "illegal" };
+    return request(app)
+      .patch("/api/comments/1")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
   
 });
 
