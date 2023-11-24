@@ -514,6 +514,62 @@ describe("DELETE /api/comments/:comment_id", () => {
   });
 });
 
+describe('PATCH /api/comments/:comment_id', () => {
+  test("200: returns row with votes incremented by given value at sepecified comment id", () => {
+    const incVotes = { inc_votes: 3 };
+    const expected = {
+      article_id: 1,
+      title: "Living in the shadow of a great man",
+      topic: "mitch",
+      author: "butter_bridge",
+      body: "I find this existence challenging",
+      created_at: expect.any(String),
+      votes: 103,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(incVotes)
+      .expect(200)
+      .then(({ body }) => {
+        const { updated } = body;
+        expect(updated).toEqual(expected);
+      });
+  });
+
+  // test("404: responds with error message if that article_id does not exist", () => {
+  //   return request(app)
+  //     .patch("/api/articles/7464")
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe("not found");
+  //     });
+  // });
+  // test("400: responds with 'bad request' if article_id format is incorrect", () => {
+  //   return request(app)
+  //     .patch("/api/articles/not-an-id")
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe("bad request");
+  //     });
+  // });
+  // test("400: responds with 'bad request' if request body is invalid", () => {
+  //   const badBody = { notallowed: "illegal" };
+  //   return request(app)
+  //     .patch("/api/articles/1")
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe("bad request");
+  //     });
+  // });
+  
+});
+
+
+
+
+
 describe("GET /api/users", () => {
   test("200: responds with an array of users", () => {
     return request(app)
@@ -536,7 +592,7 @@ describe("GET /api/users", () => {
 describe("/api/users/:username", () => {
   test("200: returns a user object with given username", () => {
     return request(app)
-      .get("/api/users/sam")
+      .get("/api/users/icellusedkars")
       .expect(200)
       .then(({ body }) => {
         const { user } = body;
@@ -557,3 +613,5 @@ describe("/api/users/:username", () => {
       });
   });
 });
+
+
