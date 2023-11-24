@@ -320,10 +320,6 @@ describe("GET /api/articles", () => {
         });
     });
   });
-
-
-
-
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
@@ -533,6 +529,31 @@ describe("GET /api/users", () => {
             avatar_url: expect.any(String),
           });
         });
+      });
+  });
+});
+
+describe("/api/users/:username", () => {
+  test("200: returns a user object with given username", () => {
+    return request(app)
+      .get("/api/users/sam")
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toEqual({
+          username: "icellusedkars",
+          name: "sam",
+          avatar_url:
+            "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+        });
+      });
+  });
+  test("404: sends not found when given a non-existent username", () => {
+    return request(app)
+      .get("/api/users/not-a-user")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("not found");
       });
   });
 });

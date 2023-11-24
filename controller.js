@@ -1,5 +1,8 @@
 const { selectTopics, checkTopicExists } = require("./models/topics-model");
-const { selectUsers } = require("./models/users-model.js");
+const {
+  selectUsers,
+  selectUserByUsername,
+} = require("./models/users-model.js");
 
 const {
   selectArticleById,
@@ -28,10 +31,25 @@ exports.getUsers = (req, res, next) => {
   });
 };
 
+exports.getUserByUsername = (req, res, next) => {
+  console.log("here");
+  const { username } = req.params;
+  console.log(username);
+  selectUserByUsername(username)
+    .then((user) => {
+      console.log(user);
+      res.status(200).send({user});
+    })
+    .catch(next);
+};
+
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order } = req.query;
   if (topic) {
-    Promise.all([selectArticles(topic, sort_by, order), checkTopicExists(topic)])
+    Promise.all([
+      selectArticles(topic, sort_by, order),
+      checkTopicExists(topic),
+    ])
       .then((articles) => {
         const resolvedArticles = articles[0];
         res.status(200).send({ articles: resolvedArticles });
