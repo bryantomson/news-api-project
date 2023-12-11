@@ -439,6 +439,73 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
+//TASK 19 - incomplete. 
+
+
+// describe("POST /api/articles", () => {
+//   test("201: inserts a new article to the db posted article back to the client", () => {
+//     const testArticle = {
+//       author: "icellusedkars",
+//       title: "Carrot cake design philosophy",
+//       body: "Toasting pecans and using brown sugar can add extra flavor and moisture",
+//       topic: "paper",
+//       article_img_url:
+//         "https://butternutbakeryblog.com/wp-content/uploads/2019/04/carrot-cake-layers.jpg",
+//     };
+
+//     return request(app)
+//       .post("/api/articles")
+//       .send(testArticle)
+//       .expect(201)
+//       .then(({ body }) => {
+//         const { article } = body;
+//         expect(article).toEqual(expected);
+//       });
+//   });
+
+  // test("404: returns custom error message if the username does not exist in the db", () => {
+  //   const testComment = {
+  //     username: "not-a-user",
+  //     body: "blah blah blah",
+  //   };
+  //   return request(app)
+  //     .post("/api/articles/1/comments")
+  //     .send(testComment)
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toEqual(
+  //         "username not found, please sign up to continue"
+  //       );
+  //     });
+  // });
+  // test("404: returns not found if the article_id does not exist in the db", () => {
+  //   const testComment = {
+  //     username: "rogersop",
+  //     body: "blah blah blah",
+  //   };
+  //   return request(app)
+  //     .post("/api/articles/999/comments")
+  //     .send(testComment)
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toEqual("not found");
+  //     });
+  // });
+
+  // test("400: returns bad request if the inserted comment does not have the required properties", () => {
+  //   const testComment = {
+  //     username: "rogersop",
+  //   };
+  //   return request(app)
+  //     .post("/api/articles/1/comments")
+  //     .send(testComment)
+  //     .expect(400)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toEqual("bad request");
+  //     });
+  // });
+
+
 describe("PATCH /api/articles/:article_id", () => {
   test("200: returns row with votes incremented by given value at sepecified article id", () => {
     const incVotes = { inc_votes: 3 };
@@ -514,16 +581,16 @@ describe("DELETE /api/comments/:comment_id", () => {
   });
 });
 
-describe('PATCH /api/comments/:comment_id', () => {
+describe("PATCH /api/comments/:comment_id", () => {
   test("200: returns row with votes incremented by given value at sepecified comment id", () => {
     const incVotes = { inc_votes: 3 };
     const expected = {
       comment_id: 1,
       body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-    votes: 19,
-    author: "butter_bridge",
-    article_id: 9,
-    created_at: expect.any(String)
+      votes: 19,
+      author: "butter_bridge",
+      article_id: 9,
+      created_at: expect.any(String),
     };
     return request(app)
       .patch("/api/comments/1")
@@ -560,12 +627,7 @@ describe('PATCH /api/comments/:comment_id', () => {
         expect(body.msg).toBe("bad request");
       });
   });
-  
 });
-
-
-
-
 
 describe("GET /api/users", () => {
   test("200: responds with an array of users", () => {
@@ -610,5 +672,3 @@ describe("/api/users/:username", () => {
       });
   });
 });
-
-
